@@ -1,0 +1,2471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="SwiftSane — End-to-end vendor security for Indian tech companies." />
+    <title>SwiftSane — Secure Every Link in the Chain</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --navy: #0C1A2E;
+            --navy-mid: #122340;
+            --navy-light: #1A3058;
+            --brand-orange: #E8862C;
+            --brand-orange-soft: rgba(232, 134, 44, 0.12);
+            --danger: #E5342E;
+            --danger-glow: rgba(229, 52, 46, 0.25);
+            --danger-soft: #FFEBE9;
+            --danger-vivid: #FF3B30;
+            --success: #34C759;
+            --success-soft: #DAFBE1;
+            --warning: #FF9500;
+            --warning-soft: #FFF3CD;
+            --accent: #3B82F6;
+            --accent-soft: #DBEAFE;
+            --white: #FFFFFF;
+            --surface: #F5F7FA;
+            --border: #D1D9E6;
+            --border-light: #E5EAF2;
+            --text: #111827;
+            --text-secondary: #374151;
+            --text-muted: #6B7280;
+            --text-dim: #9CA3AF;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --max-w: 1080px;
+            --max-w-narrow: 700px;
+            --radius: 14px;
+            --radius-sm: 8px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--white);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--navy);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--navy-light);
+            border-radius: 3px;
+        }
+
+        /* NAV */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            padding: 0 32px;
+            background: rgba(12, 26, 46, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            transition: background 0.3s;
+        }
+
+        .nav-inner {
+            max-width: var(--max-w);
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-family: var(--font-sans);
+            font-weight: 800;
+            font-size: 1rem;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            letter-spacing: -0.03em;
+        }
+
+        .logo-swift {
+            color: #fff;
+        }
+
+        .logo-sane {
+            color: var(--brand-orange);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--brand-orange);
+        }
+
+        .nav-cta {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--brand-orange);
+            border: 1.5px solid var(--brand-orange);
+            padding: 6px 18px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+            letter-spacing: 0.01em;
+        }
+
+        .nav-cta:hover {
+            background: var(--brand-orange);
+            color: #fff;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: #fff;
+            border-radius: 2px;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 56px;
+            left: 0;
+            right: 0;
+            background: rgba(12, 26, 46, 0.97);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 20px 32px;
+            flex-direction: column;
+            gap: 14px;
+            z-index: 999;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            padding: 6px 0;
+        }
+
+        /* STORY SCREENS */
+        .story-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-inner {
+            max-width: var(--max-w-narrow);
+            width: 100%;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 36px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255, 255, 255, 0.25);
+            font-size: 0.7rem;
+            font-weight: 500;
+            animation: bounce-hint 2.5s ease-in-out infinite;
+        }
+
+        .scroll-hint svg {
+            width: 16px;
+            height: 16px;
+            stroke: rgba(255, 255, 255, 0.25);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+
+        @keyframes bounce-hint {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(6px);
+            }
+        }
+
+        .ch-label {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* SCREEN 1 — HOOK */
+        .screen-hook {
+            background: linear-gradient(180deg, #080E1A 0%, var(--navy) 50%, #0F1F36 100%);
+        }
+
+        .screen-hook::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(229, 52, 46, 0.08) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        #particle-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hook-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .hook-chapter {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.3);
+            margin-bottom: 32px;
+        }
+
+        .hook-big-number {
+            font-family: var(--font-mono);
+            font-size: clamp(3.5rem, 10vw, 7rem);
+            font-weight: 800;
+            color: var(--danger-vivid);
+            line-height: 1;
+            letter-spacing: -0.04em;
+            text-shadow: 0 0 60px rgba(229, 52, 46, 0.3), 0 0 120px rgba(229, 52, 46, 0.1);
+        }
+
+        .hook-statement {
+            font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.55);
+            line-height: 1.7;
+            margin-top: 32px;
+            max-width: 560px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hook-statement strong {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 700;
+        }
+
+        .hook-context {
+            margin-top: 44px;
+            padding: 22px 26px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius);
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.35);
+            line-height: 1.75;
+            text-align: left;
+            border-left: 3px solid var(--brand-orange);
+        }
+
+        .hook-context strong {
+            color: rgba(255, 255, 255, 0.65);
+            font-weight: 600;
+        }
+
+        /* SCREEN 2 — ROOT CAUSE */
+        .screen-rootcause {
+            background: var(--surface);
+        }
+
+        .rc-headline {
+            font-size: clamp(1.7rem, 3.8vw, 2.6rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            color: var(--text);
+            line-height: 1.15;
+            margin-bottom: 16px;
+        }
+
+        .rc-headline em {
+            font-style: normal;
+            color: var(--brand-orange);
+        }
+
+        .rc-sub {
+            font-size: 1.02rem;
+            color: var(--text-muted);
+            line-height: 1.75;
+            margin-bottom: 44px;
+            max-width: 540px;
+        }
+
+        .vector-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .vector-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 18px 22px;
+            background: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            transition: border-color 0.3s, background 0.3s;
+        }
+
+        .vector-item:hover {
+            border-color: var(--brand-orange);
+            background: var(--brand-orange-soft);
+        }
+
+        .vector-icon {
+            display: flex;
+            align-items: center;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .vector-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--brand-orange);
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .vector-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        .vector-text strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* INCIDENT SCREENS */
+        /* Dark red */
+        .screen-inc-dark-red {
+            background: linear-gradient(160deg, #1A0A0A 0%, #0C1A2E 40%, #1C0C0C 100%);
+        }
+
+        .screen-inc-dark-red::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(229, 52, 46, 0.06) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        /* Dark amber */
+        .screen-inc-dark-amber {
+            background: linear-gradient(160deg, #1A1200 0%, #0C1A2E 40%, #1A1000 100%);
+        }
+
+        .screen-inc-dark-amber::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 149, 0, 0.05) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        /* Light white */
+        .screen-inc-light {
+            background: var(--white);
+        }
+
+        .screen-inc-light::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 149, 0, 0.03) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        /* Light surface */
+        .screen-inc-surface {
+            background: var(--surface);
+        }
+
+        .screen-inc-surface::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(229, 52, 46, 0.03) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        .inc-inner {
+            max-width: var(--max-w-narrow);
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .inc-label {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .inc-label::before {
+            content: '';
+            width: 20px;
+            height: 2px;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Light screen overrides */
+        .screen-inc-light .inc-label,
+        .screen-inc-surface .inc-label {
+            color: var(--text-dim);
+        }
+
+        .screen-inc-light .inc-label::before,
+        .screen-inc-surface .inc-label::before {
+            background: var(--text-dim);
+        }
+
+        .screen-inc-light .inc-title,
+        .screen-inc-surface .inc-title {
+            color: var(--text);
+        }
+
+        .screen-inc-light .inc-body,
+        .screen-inc-surface .inc-body {
+            color: var(--text-muted);
+        }
+
+        .screen-inc-light .inc-body strong,
+        .screen-inc-surface .inc-body strong {
+            color: var(--text);
+        }
+
+        .screen-inc-light .inc-stat,
+        .screen-inc-surface .inc-stat {
+            background: var(--surface);
+            border: 1px solid var(--border-light);
+        }
+
+        .screen-inc-light .inc-stat-label,
+        .screen-inc-surface .inc-stat-label {
+            color: var(--text-muted);
+        }
+
+        .screen-inc-light .inc-stat-num-amber {
+            color: var(--warning);
+            text-shadow: none;
+        }
+
+        .screen-inc-light .inc-stat-num-red {
+            color: var(--danger);
+            text-shadow: none;
+        }
+
+        .screen-inc-surface .inc-stat-num-red {
+            color: var(--danger);
+            text-shadow: none;
+        }
+
+        .screen-inc-surface .inc-stat-num-amber {
+            color: #CC7700;
+            text-shadow: none;
+        }
+
+        .inc-year {
+            font-family: var(--font-mono);
+            font-size: 0.66rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .inc-year-red {
+            background: rgba(229, 52, 46, 0.15);
+            color: #FF6B6B;
+        }
+
+        .inc-year-amber {
+            background: rgba(255, 149, 0, 0.15);
+            color: #FFB340;
+        }
+
+        .screen-inc-light .inc-year-amber {
+            background: rgba(255, 149, 0, 0.1);
+            color: #CC7700;
+        }
+
+        .screen-inc-surface .inc-year-red {
+            background: rgba(229, 52, 46, 0.1);
+            color: var(--danger);
+        }
+
+        .screen-inc-surface .inc-year-amber {
+            background: rgba(255, 149, 0, 0.1);
+            color: #CC7700;
+        }
+
+        .inc-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            color: #fff;
+            line-height: 1.15;
+            margin-bottom: 22px;
+        }
+
+        .inc-body {
+            font-size: 0.98rem;
+            line-height: 1.8;
+            margin-bottom: 36px;
+            max-width: 560px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .inc-body strong {
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 600;
+        }
+
+        .inc-stat {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 28px;
+            border-radius: var(--radius);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .inc-stat-num {
+            font-family: var(--font-mono);
+            font-weight: 800;
+            font-size: 1.8rem;
+            line-height: 1;
+            letter-spacing: -0.03em;
+        }
+
+        .inc-stat-num-red {
+            color: #FF4040;
+            text-shadow: 0 0 30px rgba(255, 64, 64, 0.2);
+        }
+
+        .inc-stat-num-amber {
+            color: #FFB340;
+            text-shadow: 0 0 30px rgba(255, 179, 64, 0.2);
+        }
+
+        .inc-stat-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.3);
+            line-height: 1.4;
+        }
+
+        .inc-root {
+            margin-top: 24px;
+        }
+
+        .inc-root-tag {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: 20px;
+        }
+
+        .inc-root-red {
+            background: rgba(229, 52, 46, 0.15);
+            color: #FF6B6B;
+        }
+
+        .inc-root-amber {
+            background: rgba(255, 149, 0, 0.12);
+            color: #FFB340;
+        }
+
+        .screen-inc-light .inc-root-amber {
+            background: rgba(255, 149, 0, 0.1);
+            color: #CC7700;
+        }
+
+        .screen-inc-surface .inc-root-red {
+            background: rgba(229, 52, 46, 0.1);
+            color: var(--danger);
+        }
+
+        .screen-inc-surface .inc-root-amber {
+            background: rgba(255, 149, 0, 0.1);
+            color: #CC7700;
+        }
+
+        /* PATTERN SCREEN */
+        .screen-pattern {
+            background: linear-gradient(180deg, #0C1A2E 0%, #0A1628 100%);
+        }
+
+        .pat-content {
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .pat-headline {
+            font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            color: #fff;
+            line-height: 1.2;
+            margin-bottom: 18px;
+        }
+
+        .pat-body {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.35);
+            line-height: 1.7;
+            margin-bottom: 52px;
+        }
+
+        .pat-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .pat-card {
+            padding: 28px 16px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius);
+            transition: border-color 0.3s, transform 0.25s;
+        }
+
+        .pat-card:hover {
+            border-color: var(--danger);
+            transform: translateY(-3px);
+        }
+
+        .pat-num {
+            font-family: var(--font-mono);
+            font-weight: 800;
+            font-size: 1.7rem;
+            line-height: 1;
+            letter-spacing: -0.03em;
+        }
+
+        .pat-num-red {
+            color: #FF4040;
+        }
+
+        .pat-num-amber {
+            color: #FFB340;
+        }
+
+        .pat-num-white {
+            color: #fff;
+        }
+
+        .pat-desc {
+            font-family: var(--font-mono);
+            font-size: 0.58rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.25);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        .pat-footer {
+            margin-top: 44px;
+            font-size: 0.92rem;
+            color: rgba(255, 255, 255, 0.3);
+            font-weight: 500;
+        }
+
+        .pat-footer strong {
+            color: var(--brand-orange);
+            font-weight: 700;
+        }
+
+        /* INCIDENT TIMELINE — connector between incidents */
+        .inc-connector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 32px;
+            background: var(--navy);
+        }
+
+        .inc-connector-line {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: var(--font-mono);
+            font-size: 0.58rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.15);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .inc-connector-line::before,
+        .inc-connector-line::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            width: 60px;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        /* SECTION STYLES */
+        .section-pad {
+            padding: 120px 32px;
+        }
+
+        .section-inner {
+            max-width: var(--max-w);
+            margin: 0 auto;
+        }
+
+        .s-label {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 14px;
+        }
+
+        .s-title {
+            font-size: clamp(1.5rem, 3vw, 2.1rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            color: var(--text);
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+
+        .s-sub {
+            font-size: 1rem;
+            color: var(--text-muted);
+            max-width: 560px;
+            line-height: 1.7;
+        }
+
+        /* SOLUTION STEPS */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+            margin-top: 48px;
+            margin-bottom: 56px;
+        }
+
+        .step-card {
+            background: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 22px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+        }
+
+        .step-card:hover {
+            border-color: var(--brand-orange);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .step-num {
+            font-family: var(--font-mono);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--border);
+            line-height: 1;
+        }
+
+        .step-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--brand-orange);
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .step-title {
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .step-desc {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* REPORT CARD */
+        .report-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        .report-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 26px 24px;
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.08);
+            max-width: 460px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            animation: float-card 6s ease-in-out infinite;
+        }
+
+        @keyframes float-card {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-7px);
+            }
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            animation: scan 3.5s ease-in-out infinite;
+        }
+
+        @keyframes scan {
+            0% {
+                top: 0;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+
+        .rpt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .rpt-label {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        .rpt-badge {
+            font-family: var(--font-mono);
+            font-size: 0.56rem;
+            font-weight: 600;
+            background: var(--accent-soft);
+            color: var(--accent);
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        .vendor-name {
+            font-family: var(--font-mono);
+            font-size: 0.86rem;
+            color: var(--text-dim);
+            letter-spacing: 0.16em;
+            margin-bottom: 16px;
+        }
+
+        .score-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .score-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid var(--danger);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: var(--danger-soft);
+        }
+
+        .score-num {
+            font-family: var(--font-mono);
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--danger);
+            line-height: 1;
+        }
+
+        .score-lbl {
+            font-family: var(--font-mono);
+            font-size: 0.44rem;
+            color: var(--danger);
+            margin-top: 1px;
+        }
+
+        .score-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .score-tag {
+            font-family: var(--font-mono);
+            font-size: 0.66rem;
+            font-weight: 700;
+            color: var(--danger);
+            text-transform: uppercase;
+        }
+
+        .score-desc {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+        }
+
+        .comp-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 14px;
+        }
+
+        .comp-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 7px 12px;
+            background: var(--surface);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-light);
+        }
+
+        .comp-name {
+            font-family: var(--font-mono);
+            font-size: 0.66rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .status {
+            font-family: var(--font-mono);
+            font-size: 0.56rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        .st-fail {
+            background: var(--danger-soft);
+            color: var(--danger);
+        }
+
+        .st-part {
+            background: var(--warning-soft);
+            color: var(--warning);
+        }
+
+        .st-pass {
+            background: var(--success-soft);
+            color: var(--success);
+        }
+
+        .alert-box {
+            background: var(--danger-soft);
+            border: 1px solid rgba(229, 52, 46, 0.12);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .alert-icon {
+            flex-shrink: 0;
+            margin-top: 1px;
+            display: flex;
+        }
+
+        .alert-icon svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--danger);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .alert-title {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: var(--danger);
+            text-transform: uppercase;
+        }
+
+        .alert-desc {
+            font-size: 0.68rem;
+            color: var(--danger);
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+
+        /* FEATURES */
+        .feat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 48px;
+        }
+
+        .feat-card {
+            background: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 26px 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.25s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        .feat-card:hover {
+            border-color: var(--brand-orange);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .feat-tag {
+            font-family: var(--font-mono);
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--brand-orange);
+        }
+
+        .feat-icon svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--brand-orange);
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .feat-title {
+            font-size: 0.96rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .feat-desc {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        .feat-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .feat-list li {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            line-height: 1.5;
+        }
+
+        .feat-list li::before {
+            content: '→';
+            color: var(--brand-orange);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .section-dark {
+            background: var(--navy);
+            background: linear-gradient(180deg, #0A1628 0%, var(--navy) 100%);
+        }
+
+        .section-dark .s-label {
+            color: var(--brand-orange);
+        }
+
+        .section-dark .s-title {
+            color: #fff;
+        }
+
+        .section-dark .s-sub {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .section-dark .feat-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .section-dark .feat-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--brand-orange);
+        }
+
+        .section-dark .feat-title {
+            color: #fff;
+        }
+
+        .section-dark .feat-desc {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .section-dark .feat-list li {
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        /* WHO ITS FOR */
+        .who-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 48px;
+        }
+
+        .who-card {
+            background: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.25s;
+        }
+
+        .who-card:hover {
+            border-color: var(--brand-orange);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .who-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brand-orange-soft);
+        }
+
+        .who-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--brand-orange);
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .who-title {
+            font-size: 0.94rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .who-desc {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        .who-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .who-tag {
+            font-family: var(--font-mono);
+            font-size: 0.58rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: var(--surface);
+            color: var(--text-muted);
+            border: 1px solid var(--border-light);
+        }
+
+        /* COMPLIANCE */
+        .compliance-section {
+            background: var(--navy);
+            background: linear-gradient(180deg, #0A1628 0%, var(--navy) 100%);
+        }
+
+        .compliance-section .s-label {
+            color: var(--brand-orange);
+        }
+
+        .compliance-section .s-title {
+            color: #fff;
+        }
+
+        .fw-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .fw-badge {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 9px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.03);
+            transition: all 0.25s;
+        }
+
+        .fw-badge:hover {
+            border-color: var(--brand-orange);
+            color: var(--brand-orange);
+            background: rgba(232, 134, 44, 0.08);
+        }
+
+        .compliance-note {
+            font-size: 0.86rem;
+            color: rgba(255, 255, 255, 0.35);
+            margin-top: 24px;
+            max-width: 580px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.65;
+            text-align: center;
+        }
+
+        /* WHY */
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 48px;
+        }
+
+        .why-card {
+            background: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.25s;
+        }
+
+        .why-card:hover {
+            border-color: var(--brand-orange);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .why-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brand-orange-soft);
+        }
+
+        .why-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--brand-orange);
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .why-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .why-desc {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        /* CTA */
+        .cta-section {
+            background: linear-gradient(180deg, #0A1628 0%, var(--navy) 100%);
+            padding: 120px 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(232, 134, 44, 0.06) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        .cta-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            color: #fff;
+            line-height: 1.25;
+            margin-bottom: 28px;
+        }
+
+        .cta-btn {
+            font-size: 0.88rem;
+            font-weight: 700;
+            background: var(--brand-orange);
+            color: #fff;
+            padding: 16px 38px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+            transition: all 0.2s;
+            box-shadow: 0 4px 20px rgba(232, 134, 44, 0.3);
+        }
+
+        .cta-btn:hover {
+            background: #D4780F;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(232, 134, 44, 0.4);
+        }
+
+        .trust-signals {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 44px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .trust-item {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .trust-dot {
+            width: 4px;
+            height: 4px;
+            background: var(--success);
+            border-radius: 50%;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: var(--navy);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 22px 32px;
+        }
+
+        .footer-inner {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-logo {
+            font-weight: 800;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .footer-logo span {
+            color: var(--brand-orange);
+        }
+
+        .footer-tag {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.15);
+            margin-left: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 18px;
+            list-style: none;
+        }
+
+        .footer-links a {
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.2);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .footer-right {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* ANIMATIONS */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.9s ease, transform 0.9s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-up-d1 {
+            transition-delay: 0.12s;
+        }
+
+        .fade-up-d2 {
+            transition-delay: 0.24s;
+        }
+
+        .fade-up-d3 {
+            transition-delay: 0.36s;
+        }
+
+        .fade-up-d4 {
+            transition-delay: 0.48s;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .pat-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .feat-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .who-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .why-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .story-screen {
+                padding: 80px 24px;
+            }
+
+            .section-pad {
+                padding: 80px 24px;
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .feat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .who-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pat-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .why-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .cta-section {
+                padding: 80px 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hook-big-number {
+                font-size: 2.8rem;
+            }
+
+            .pat-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .inc-stat {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo"><span class="logo-swift">Swift</span><span class="logo-sane">Sane</span></a>
+            <ul class="nav-links">
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#compliance">Compliance</a></li>
+                <li><a href="#why">Why SwiftSane</a></li>
+            </ul>
+            <a href="#cta" class="nav-cta">Book a Demo</a>
+            <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#solution" class="mob-link">Solution</a>
+        <a href="#features" class="mob-link">Features</a>
+        <a href="#compliance" class="mob-link">Compliance</a>
+        <a href="#why" class="mob-link">Why SwiftSane</a>
+        <a href="#cta" class="mob-link" style="color:var(--brand-orange);font-weight:700;">Book a Demo</a>
+    </div>
+
+    <!-- SCREEN 1 — THE HOOK -->
+    <section class="story-screen screen-hook" id="hero">
+        <canvas id="particle-canvas"></canvas>
+        <div class="hook-content">
+            <div class="hook-chapter fade-up">// THE REALITY</div>
+            <div class="fade-up">
+                <div class="hook-big-number">₹17–18 Cr</div>
+                <p class="hook-statement">The average cost of a data breach in India. And in most cases, the attacker
+                    didn't break in through your front door. <strong>They walked in through your vendor.</strong></p>
+            </div>
+            <div class="hook-context fade-up fade-up-d1">
+                India saw <strong>15 lakh+ cyber incidents</strong> reported to CERT-In in a single year. Over
+                <strong>50% of enterprise breaches globally</strong> are traced back to a third-party vendor — a
+                supplier, a SaaS tool, an API integration, a payment processor. The threat isn't just external anymore.
+                <strong>It's inside your supply chain.</strong>
+            </div>
+        </div>
+        <div class="scroll-hint">
+            <span>Scroll to continue</span>
+            <svg viewBox="0 0 24 24">
+                <path d="M12 5v14M19 12l-7 7-7-7" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- SCREEN 2 — ROOT CAUSE -->
+    <section class="story-screen screen-rootcause">
+        <div class="story-inner">
+            <div class="ch-label fade-up" style="color:var(--brand-orange);">
+                <span style="display:inline-block;width:24px;height:2px;background:var(--brand-orange);"></span>The Root
+                Cause
+            </div>
+            <h2 class="rc-headline fade-up">Your vendors have access to your systems.<br><em>Do you know if they're
+                    secure?</em></h2>
+            <p class="rc-sub fade-up">Every vendor you onboard — a payment gateway, a cloud provider, a KYC verification
+                partner, a data analytics tool — becomes part of your attack surface. Most companies have no structured
+                way to assess them before granting access.</p>
+            <div class="vector-list">
+                <div class="vector-item fade-up">
+                    <span class="vector-icon"><svg viewBox="0 0 24 24">
+                            <rect x="3" y="11" width="18" height="11" rx="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg></span>
+                    <p class="vector-text"><strong>No structured vendor onboarding</strong> — Vendors are added through
+                        email threads and spreadsheets. No security intake. No baseline assessment. No documentation
+                        trail.</p>
+                </div>
+                <div class="vector-item fade-up fade-up-d1">
+                    <span class="vector-icon"><svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                            <circle cx="12" cy="12" r="4" />
+                            <line x1="4.93" y1="4.93" x2="9.17" y2="9.17" />
+                            <line x1="14.83" y1="14.83" x2="19.07" y2="19.07" />
+                            <line x1="14.83" y1="9.17" x2="19.07" y2="4.93" />
+                            <line x1="4.93" y1="19.07" x2="9.17" y2="14.83" />
+                        </svg></span>
+                    <p class="vector-text"><strong>No idea which vendors are critical</strong> — The vendor with access
+                        to your core banking API is treated the same as the vendor sending your marketing emails.</p>
+                </div>
+                <div class="vector-item fade-up fade-up-d2">
+                    <span class="vector-icon"><svg viewBox="0 0 24 24">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg></span>
+                    <p class="vector-text"><strong>No active security testing</strong> — You've never actually tested
+                        whether your vendor's API integration can be exploited to access your environment.</p>
+                </div>
+                <div class="vector-item fade-up fade-up-d3">
+                    <span class="vector-icon"><svg viewBox="0 0 24 24">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                        </svg></span>
+                    <p class="vector-text"><strong>Compliance is manual and reactive</strong> — You scramble to produce
+                        vendor risk documentation only when an audit is announced or a regulator asks for it.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCREEN 3 — INCIDENT: FINTECH -->
+    <section class="story-screen screen-inc-dark-red">
+        <div class="inc-inner">
+            <div class="inc-label fade-up">Incident — Indian Fintech Ecosystem</div>
+            <div class="inc-year inc-year-red fade-up">2024 · India</div>
+            <h2 class="inc-title fade-up">The App Had Millions of Users.<br>The Vendor Had Zero Vetting.</h2>
+            <p class="inc-body fade-up">
+                In 2024, multiple Indian fintech platforms and payment apps suffered data exposure incidents — customer
+                KYC data, transaction histories, and Aadhaar-linked records found circulating on dark web forums and
+                Telegram channels.
+                <br><br>
+                In several cases, the breach wasn't in the company's own infrastructure. <strong>It was in a third-party
+                    vendor</strong> — a data analytics provider, a KYC verification partner, or an SMS gateway with
+                direct database access — that had never undergone a formal security assessment. The vendors had API
+                keys. They had database credentials. They had customer PII. <strong>But they had never been
+                    tested.</strong>
+            </p>
+            <div class="inc-stat fade-up">
+                <div class="inc-stat-num inc-stat-num-red">Crores</div>
+                <div class="inc-stat-label">of customer records exposed<br>in third-party-linked incidents</div>
+            </div>
+            <div class="inc-root fade-up">
+                <span class="inc-root-tag inc-root-red">Entry point: Unvetted third-party vendor integrations</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCREEN 4 — INCIDENT: AIRTEL -->
+    <section class="story-screen screen-inc-light">
+        <div class="inc-inner">
+            <div class="inc-label fade-up">Incident — Airtel</div>
+            <div class="inc-year inc-year-amber fade-up">2019 · India</div>
+            <h2 class="inc-title fade-up">375 Million Subscribers.<br>One Exposed API.</h2>
+            <p class="inc-body fade-up">
+                In 2019, a critical vulnerability was discovered in Airtel's self-care app — exposing the personal data
+                of <strong>over 325 million Airtel subscribers</strong>. Names, email addresses, dates of birth, Aadhaar
+                numbers, and IMEI numbers were accessible to anyone who knew where to look.
+                <br><br>
+                The root cause: <strong>an unsecured API endpoint</strong> in Airtel's vendor-integrated backend
+                infrastructure — no authentication required, no rate limiting, no monitoring. A third-party integration
+                left completely open. Airtel initially denied the breach before acknowledging the vulnerability after
+                independent security researchers demonstrated the exploit publicly.
+                <br><br>
+                Fast forward to 2023 — <strong>Airtel Payments Bank</strong> faced scrutiny again as telecom-financial
+                convergence brought an entirely new category of vendor risk. Every new financial partner, every payment
+                API, every KYC aggregator added to the ecosystem — <strong>none formally assessed for security
+                    posture.</strong>
+            </p>
+            <div class="inc-stat fade-up">
+                <div class="inc-stat-num inc-stat-num-red">325 Mn+</div>
+                <div class="inc-stat-label">Subscribers' personal data<br>exposed via unsecured API</div>
+            </div>
+            <div class="inc-root fade-up">
+                <span class="inc-root-tag inc-root-red">Entry point: Unauthenticated third-party API endpoint</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCREEN 5 — INCIDENT: JIO -->
+    <section class="story-screen screen-inc-dark-amber">
+        <div class="inc-inner">
+            <div class="inc-label fade-up">Incident — Reliance Jio</div>
+            <div class="inc-year inc-year-amber fade-up">2017 · India</div>
+            <h2 class="inc-title fade-up">120 Million Records.<br>Leaked Through a Third-Party Site.</h2>
+            <p class="inc-body fade-up">
+                In 2017, data belonging to over <strong>120 million Jio subscribers</strong> appeared on a website
+                called "Magicapk" — names, mobile numbers, email IDs, Aadhaar numbers, and SIM activation details, all
+                fully searchable.
+                <br><br>
+                The data didn't come from Jio's core systems. It came from <strong>a third-party channel</strong> — a
+                vendor or partner with access to Jio's customer database — that had inadequate security controls and no
+                formal assessment process. Jio's massive subscriber acquisition drive meant hundreds of vendor
+                touchpoints across retail, distribution, and digital onboarding — <strong>almost none of them formally
+                    vetted for security.</strong>
+                <br><br>
+                By the time Jio Financial Services launched in 2023, the vendor ecosystem had grown exponentially —
+                bringing the same unvetted third-party risk into an environment now handling customer financial data.
+            </p>
+            <div class="inc-stat fade-up">
+                <div class="inc-stat-num inc-stat-num-amber">120 Mn</div>
+                <div class="inc-stat-label">Jio subscriber records<br>exposed via third-party channel</div>
+            </div>
+            <div class="inc-root fade-up">
+                <span class="inc-root-tag inc-root-amber">Entry point: Unvetted third-party partner with database
+                    access</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCREEN 6 — INCIDENT: STAR HEALTH -->
+    <section class="story-screen screen-inc-surface">
+        <div class="inc-inner">
+            <div class="inc-label fade-up">Incident — Star Health Insurance</div>
+            <div class="inc-year inc-year-red fade-up">2024 · India</div>
+            <h2 class="inc-title fade-up">India's Largest Health Insurer.<br>Breached Through an Internal Channel.</h2>
+            <p class="inc-body fade-up">
+                In September 2024, Star Health Insurance — India's largest standalone health insurer — suffered one of
+                the country's most significant data breaches. Over <strong>31 million customers' data was
+                    exposed</strong> — including medical reports, policy details, PAN card numbers, and sensitive health
+                records.
+                <br><br>
+                The breach was facilitated through a <strong>compromised internal access channel</strong> — allegedly
+                involving a senior executive's credentials — and data was made available through Telegram chatbots. What
+                made it worse: Star Health had vendors, agents, and third-party distribution partners with varying
+                levels of system access — <strong>none of which had been formally security-assessed or access-controlled
+                    at the vendor level.</strong>
+                <br><br>
+                The incident triggered regulatory scrutiny and raised urgent questions about how Indian insurers — and
+                the financial services ecosystem broadly — manage vendor and partner access to sensitive customer data.
+            </p>
+            <div class="inc-stat fade-up">
+                <div class="inc-stat-num inc-stat-num-red">31 Mn</div>
+                <div class="inc-stat-label">Customer records exposed<br>including medical & financial data</div>
+            </div>
+            <div class="inc-root fade-up">
+                <span class="inc-root-tag inc-root-red">Entry point: Uncontrolled internal & partner access
+                    channels</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCREEN 7 — INCIDENT: TELECOM CONVERGENCE -->
+    <section class="story-screen screen-inc-dark-red">
+        <div class="inc-inner">
+            <div class="inc-label fade-up">Incident — Telecom &amp; Banking Convergence</div>
+            <div class="inc-year inc-year-amber fade-up">2023–2024 · India</div>
+            <h2 class="inc-title fade-up">Millions of Customers.<br>One Vulnerable Vendor.</h2>
+            <p class="inc-body fade-up">
+                As India's telecom giants — Airtel, Jio, Vi — expanded into financial services (payments banks, lending
+                platforms, insurance marketplaces), they inherited the vendor complexity of <strong>both industries at
+                    once.</strong>
+                <br><br>
+                Third-party payment processors, KYC aggregators, credit scoring APIs, and core banking partners
+                multiplied overnight. Several incidents across this sector traced sensitive customer financial data
+                exposures back to <strong>inadequately assessed third-party integrations</strong> — vendors running
+                legacy systems with no incident response plans, no penetration testing, and no formal security posture
+                documentation.
+            </p>
+            <div class="inc-stat fade-up">
+                <div class="inc-stat-num inc-stat-num-amber">~81 Cr</div>
+                <div class="inc-stat-label">Records reportedly exposed across<br>India's telecom-financial ecosystem
+                </div>
+            </div>
+            <div class="inc-root fade-up">
+                <span class="inc-root-tag inc-root-amber">Entry point: Third-party API and data processor security
+                    gaps</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCREEN 8 — THE PATTERN -->
+    <section class="story-screen screen-pattern">
+        <div class="pat-content">
+            <div class="ch-label fade-up" style="color:var(--danger);justify-content:center;">
+                <span style="display:inline-block;width:24px;height:2px;background:var(--danger);"></span>The Pattern
+            </div>
+            <h2 class="pat-headline fade-up">This isn't one company's problem.<br>It's a systemic failure across Indian
+                tech.</h2>
+            <p class="pat-body fade-up">Airtel. Jio. Star Health. Fintech platforms. Every major breach follows the same
+                pattern — a trusted vendor or partner, no formal security assessment, access that should never have been
+                granted.</p>
+            <div class="pat-stats">
+                <div class="pat-card fade-up">
+                    <div class="pat-num pat-num-red">₹17–18 Cr</div>
+                    <div class="pat-desc">Average breach<br>cost in India</div>
+                </div>
+                <div class="pat-card fade-up fade-up-d1">
+                    <div class="pat-num pat-num-amber">15 L+</div>
+                    <div class="pat-desc">CERT-In cyber<br>incidents annually</div>
+                </div>
+                <div class="pat-card fade-up fade-up-d2">
+                    <div class="pat-num pat-num-white">~50%+</div>
+                    <div class="pat-desc">Breaches globally involve<br>third-party vendors</div>
+                </div>
+                <div class="pat-card fade-up fade-up-d3">
+                    <div class="pat-num pat-num-red">Top 3</div>
+                    <div class="pat-desc">India: among most<br>targeted nations globally</div>
+                </div>
+            </div>
+            <p class="pat-footer fade-up">Most of these could have been <strong>caught at the vendor level</strong> —
+                before access was ever granted.</p>
+        </div>
+    </section>
+
+    <!-- SOLUTION -->
+    <section class="section-pad" id="solution" style="background:var(--surface);">
+        <div class="section-inner">
+            <div class="fade-up">
+                <div class="s-label">The Solution</div>
+                <h2 class="s-title">One platform. The entire vendor security lifecycle.</h2>
+                <p class="s-sub">SwiftSane gives tech companies a complete, structured system to onboard, assess, test,
+                    and monitor every vendor in their ecosystem — before they become a liability.</p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card fade-up">
+                    <div class="step-num">01</div>
+                    <div class="step-icon"><svg viewBox="0 0 24 24">
+                            <path d="M9 12h6M9 16h6M17 21H7a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
+                        </svg></div>
+                    <h3 class="step-title">Due Diligence</h3>
+                    <p class="step-desc">Security questionnaires & documentation before any conversation advances.</p>
+                </div>
+                <div class="step-card fade-up fade-up-d1">
+                    <div class="step-num">02</div>
+                    <div class="step-icon"><svg viewBox="0 0 24 24">
+                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                        </svg></div>
+                    <h3 class="step-title">Onboarding</h3>
+                    <p class="step-desc">Structured intake with multi-stakeholder approval before system access.</p>
+                </div>
+                <div class="step-card fade-up fade-up-d2">
+                    <div class="step-num">03</div>
+                    <div class="step-icon"><svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                            <circle cx="12" cy="12" r="6" />
+                            <circle cx="12" cy="12" r="2" />
+                        </svg></div>
+                    <h3 class="step-title">Criticality Assessment</h3>
+                    <p class="step-desc">Risk scoring & tiering of every vendor by access level and business impact.</p>
+                </div>
+                <div class="step-card fade-up fade-up-d3">
+                    <div class="step-num">04</div>
+                    <div class="step-icon"><svg viewBox="0 0 24 24">
+                            <line x1="18" y1="20" x2="18" y2="10" />
+                            <line x1="12" y1="20" x2="12" y2="4" />
+                            <line x1="6" y1="20" x2="6" y2="14" />
+                        </svg></div>
+                    <h3 class="step-title">Vendor Assessment</h3>
+                    <p class="step-desc">Ongoing compliance monitoring and risk evaluation over time.</p>
+                </div>
+                <div class="step-card fade-up fade-up-d4">
+                    <div class="step-num">05</div>
+                    <div class="step-icon"><svg viewBox="0 0 24 24">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg></div>
+                    <h3 class="step-title">VAPT</h3>
+                    <p class="step-desc">Penetration testing of vendor integrations and exposed attack surfaces.</p>
+                </div>
+            </div>
+
+            <!-- REPORT CARD -->
+            <div class="report-wrapper fade-up">
+                <div class="report-card">
+                    <div class="scan-line"></div>
+                    <div class="rpt-header">
+                        <span class="rpt-label">Vendor Assessment Report</span>
+                        <span class="rpt-badge">AUTO-GENERATED</span>
+                    </div>
+                    <div class="vendor-name">████████ Payments Pvt Ltd</div>
+                    <div class="score-area">
+                        <div class="score-circle">
+                            <span class="score-num" id="score-counter">0</span>
+                            <span class="score-lbl">/100</span>
+                        </div>
+                        <div class="score-meta">
+                            <span class="score-tag">Critical Risk</span>
+                            <span class="score-desc">Vendor fails multiple mandatory compliance thresholds</span>
+                        </div>
+                    </div>
+                    <div class="comp-rows">
+                        <div class="comp-row"><span class="comp-name">DPDP Act 2023</span><span
+                                class="status st-part">PARTIAL</span></div>
+                        <div class="comp-row"><span class="comp-name">RBI Guidelines</span><span
+                                class="status st-fail">FAIL</span></div>
+                        <div class="comp-row"><span class="comp-name">PCI DSS</span><span
+                                class="status st-fail">FAIL</span></div>
+                        <div class="comp-row"><span class="comp-name">VAPT Status</span><span class="status st-fail">3
+                                CRITICAL</span></div>
+                    </div>
+                    <div class="alert-box">
+                        <span class="alert-icon"><svg viewBox="0 0 24 24">
+                                <path
+                                    d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                                <line x1="12" y1="9" x2="12" y2="13" />
+                                <line x1="12" y1="17" x2="12.01" y2="17" />
+                            </svg></span>
+                        <div>
+                            <div class="alert-title">Critical Gap Detected</div>
+                            <div class="alert-desc">No incident response plan. API keys exposed in public repository.
+                                Immediate remediation required.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5 FEATURES -->
+    <section class="section-pad section-dark" id="features">
+        <div class="section-inner">
+            <div class="fade-up" style="text-align:center;">
+                <div class="s-label" style="text-align:center;">What We Do</div>
+                <h2 class="s-title" style="text-align:center;">Five services. One mission.<br>Know your vendors before
+                    they know your systems.</h2>
+                <p class="s-sub" style="text-align:center;max-width:560px;margin:12px auto 0;">The complete vendor
+                    security lifecycle — from first contact to ongoing penetration testing.</p>
+            </div>
+            <div class="feat-grid">
+                <div class="feat-card fade-up">
+                    <div class="feat-tag">Feature 01</div>
+                    <div class="feat-icon"><svg viewBox="0 0 24 24">
+                            <path d="M9 12h6M9 16h6M17 21H7a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
+                        </svg></div>
+                    <h3 class="feat-title">Vendor Due Diligence</h3>
+                    <p class="feat-desc">Before any vendor conversation advances, SwiftSane runs a comprehensive due
+                        diligence check — security questionnaires, compliance certifications, infrastructure
+                        documentation, and digital footprint analysis.</p>
+                    <ul class="feat-list">
+                        <li>Automated security questionnaire distribution</li>
+                        <li>Certification & documentation verification</li>
+                        <li>Digital footprint & reputation scanning</li>
+                        <li>Initial red flag detection</li>
+                    </ul>
+                </div>
+                <div class="feat-card fade-up fade-up-d1">
+                    <div class="feat-tag">Feature 02</div>
+                    <div class="feat-icon"><svg viewBox="0 0 24 24">
+                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                        </svg></div>
+                    <h3 class="feat-title">Vendor Onboarding</h3>
+                    <p class="feat-desc">Structured, approval-gated onboarding workflow that replaces scattered email
+                        chains. Every vendor goes through a standardized security intake process before they're granted
+                        system access.</p>
+                    <ul class="feat-list">
+                        <li>Structured onboarding with approval gates</li>
+                        <li>Centralized vendor profile repository</li>
+                        <li>Access control documentation</li>
+                        <li>Compliance checklist automation</li>
+                    </ul>
+                </div>
+                <div class="feat-card fade-up fade-up-d2">
+                    <div class="feat-tag">Feature 03</div>
+                    <div class="feat-icon"><svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                            <circle cx="12" cy="12" r="6" />
+                            <circle cx="12" cy="12" r="2" />
+                        </svg></div>
+                    <h3 class="feat-title">Criticality Assessment</h3>
+                    <p class="feat-desc">Not every vendor carries the same risk. SwiftSane scores each vendor by
+                        criticality — based on data access levels, system integration depth, regulatory exposure, and
+                        business dependency.</p>
+                    <ul class="feat-list">
+                        <li>Tiered vendor risk matrix (Critical / High / Medium / Low)</li>
+                        <li>Data access level classification</li>
+                        <li>Business dependency impact scoring</li>
+                        <li>Prioritization dashboard for security teams</li>
+                    </ul>
+                </div>
+                <div class="feat-card fade-up fade-up-d1">
+                    <div class="feat-tag">Feature 04</div>
+                    <div class="feat-icon"><svg viewBox="0 0 24 24">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg></div>
+                    <h3 class="feat-title">Vendor Assessment</h3>
+                    <p class="feat-desc">Continuous vendor risk assessment and compliance monitoring. SwiftSane tracks
+                        vendor security posture over time, flags compliance drift, and generates reports aligned to RBI,
+                        SEBI, and DPDP Act requirements.</p>
+                    <ul class="feat-list">
+                        <li>Continuous compliance monitoring</li>
+                        <li>Security posture change tracking</li>
+                        <li>Regulatory alignment (RBI / SEBI / DPDP)</li>
+                        <li>Audit-ready assessment reports</li>
+                    </ul>
+                </div>
+                <div class="feat-card fade-up fade-up-d2">
+                    <div class="feat-tag">Feature 05</div>
+                    <div class="feat-icon"><svg viewBox="0 0 24 24">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            <line x1="9" y1="12" x2="15" y2="12" />
+                            <line x1="12" y1="9" x2="12" y2="15" />
+                        </svg></div>
+                    <h3 class="feat-title">VAPT</h3>
+                    <p class="feat-desc">SwiftSane coordinates and manages penetration testing specifically for your
+                        vendor ecosystem — testing whether vendor APIs, integrations, and exposed infrastructure can be
+                        exploited to access your environment.</p>
+                    <ul class="feat-list">
+                        <li>Vendor-specific attack surface scanning</li>
+                        <li>API & integration penetration testing</li>
+                        <li>Vulnerability findings mapped to vendor relationships</li>
+                        <li>Remediation roadmap per vendor</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHO ITS FOR -->
+    <section class="section-pad" id="who" style="background:var(--surface);">
+        <div class="section-inner">
+            <div class="fade-up" style="text-align:center;">
+                <div class="s-label" style="text-align:center;">Built For</div>
+                <h2 class="s-title" style="text-align:center;">Built for Indian tech companies<br>that can't afford a
+                    vendor-linked breach.</h2>
+            </div>
+            <div class="who-grid">
+                <div class="who-card fade-up">
+                    <div class="who-icon"><svg viewBox="0 0 24 24">
+                            <rect x="2" y="5" width="20" height="14" rx="2" />
+                            <line x1="2" y1="10" x2="22" y2="10" />
+                        </svg></div>
+                    <h3 class="who-title">Fintech & Payment Platforms</h3>
+                    <p class="who-desc">For companies like PhonePe, Razorpay, BharatPe, and Paytm — handling crores of
+                        transactions daily. Every KYC partner, payment processor, and data analytics platform needs
+                        security assessment.</p>
+                    <div class="who-tags">
+                        <span class="who-tag">KYC Providers</span>
+                        <span class="who-tag">Payment Gateways</span>
+                        <span class="who-tag">Fraud Detection</span>
+                        <span class="who-tag">Data Analytics</span>
+                    </div>
+                </div>
+                <div class="who-card fade-up fade-up-d1">
+                    <div class="who-icon"><svg viewBox="0 0 24 24">
+                            <path d="M1.5 8.5l10.5-7 10.5 7v12a1 1 0 01-1 1h-6v-6h-7v6H2.5a1 1 0 01-1-1z" />
+                        </svg></div>
+                    <h3 class="who-title">Telecom-Backed Financial Services</h3>
+                    <p class="who-desc">For Airtel Payments Bank, Jio Financial Services, and similar platforms —
+                        managing massive third-party ecosystems across both telecom and financial industries
+                        simultaneously.</p>
+                    <div class="who-tags">
+                        <span class="who-tag">Core Banking</span>
+                        <span class="who-tag">SMS Gateways</span>
+                        <span class="who-tag">Credit Scoring APIs</span>
+                        <span class="who-tag">Insurance Aggregators</span>
+                    </div>
+                </div>
+                <div class="who-card fade-up fade-up-d2">
+                    <div class="who-icon"><svg viewBox="0 0 24 24">
+                            <rect x="2" y="3" width="20" height="14" rx="2" />
+                            <path d="M8 21h8M12 17v4" />
+                        </svg></div>
+                    <h3 class="who-title">SaaS & Enterprise Tech</h3>
+                    <p class="who-desc">For Indian SaaS companies with enterprise clients requiring vendor due diligence
+                        documentation, or any tech company with 10+ vendor integrations touching sensitive customer or
+                        business data.</p>
+                    <div class="who-tags">
+                        <span class="who-tag">Cloud Infrastructure</span>
+                        <span class="who-tag">Auth / SSO</span>
+                        <span class="who-tag">Analytics Tools</span>
+                        <span class="who-tag">Third-Party APIs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPLIANCE -->
+    <section class="section-pad compliance-section" id="compliance" style="text-align:center;">
+        <div class="section-inner">
+            <div class="fade-up">
+                <div class="s-label" style="text-align:center;">Compliance</div>
+                <h2 class="s-title" style="text-align:center;">Aligned to Indian Regulatory Frameworks</h2>
+            </div>
+            <div class="fw-grid fade-up fade-up-d1">
+                <span class="fw-badge">DPDP Act 2023</span>
+                <span class="fw-badge">RBI Third-Party Risk Guidelines</span>
+                <span class="fw-badge">SEBI Cybersecurity Circular</span>
+                <span class="fw-badge">PCI DSS</span>
+                <span class="fw-badge">ISO 27001</span>
+                <span class="fw-badge">SOC 2</span>
+                <span class="fw-badge">CERT-In Guidelines</span>
+            </div>
+            <p class="compliance-note fade-up fade-up-d2">Every vendor assessment and VAPT report generated by SwiftSane
+                is structured to satisfy these frameworks — so your compliance and audit teams don't have to reformat
+                anything for regulatory submissions.</p>
+        </div>
+    </section>
+
+    <!-- WHY SWIFTSANE -->
+    <section class="section-pad" id="why" style="background:var(--white);">
+        <div class="section-inner">
+            <div class="fade-up" style="text-align:center;">
+                <div class="s-label" style="text-align:center;">Why SwiftSane</div>
+                <h2 class="s-title" style="text-align:center;">Built for tech. Built for scale.<br>Not for government
+                    procurement offices.</h2>
+            </div>
+            <div class="why-grid">
+                <div class="why-card fade-up">
+                    <div class="why-icon"><svg viewBox="0 0 24 24">
+                            <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+                            <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
+                        </svg></div>
+                    <h3 class="why-title">End-to-End Platform</h3>
+                    <p class="why-desc">From vendor due diligence to ongoing VAPT — SwiftSane covers the complete vendor
+                        security lifecycle. No need to stitch together separate tools for onboarding, assessment,
+                        testing, and monitoring.</p>
+                </div>
+                <div class="why-card fade-up fade-up-d1">
+                    <div class="why-icon"><svg viewBox="0 0 24 24">
+                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg></div>
+                    <h3 class="why-title">India-Native Compliance</h3>
+                    <p class="why-desc">Every assessment, every VAPT report, every compliance output is structured
+                        against the DPDP Act 2023, RBI Third-Party Risk Management Guidelines, and SEBI Cybersecurity
+                        Circular.</p>
+                </div>
+                <div class="why-card fade-up fade-up-d2">
+                    <div class="why-icon"><svg viewBox="0 0 24 24">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M3 9h18M9 21V9" />
+                        </svg></div>
+                    <h3 class="why-title">Replaces Spreadsheets</h3>
+                    <p class="why-desc">Most Indian tech companies still manage vendor risk in Excel sheets and email
+                        chains. SwiftSane replaces that entirely — with automated workflows, real-time dashboards, and
+                        audit-ready outputs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section" id="cta">
+        <div class="cta-glow"></div>
+        <div class="cta-inner fade-up">
+            <h2 class="cta-title">Your vendors are inside your perimeter.<br>Time to know if they belong there.</h2>
+            <a href="#" class="cta-btn">Book a Demo</a>
+            <div class="trust-signals">
+                <span class="trust-item"><span class="trust-dot"></span>Indian Servers</span>
+                <span class="trust-item"><span class="trust-dot"></span>End-to-End Encrypted</span>
+                <span class="trust-item"><span class="trust-dot"></span>DPDP Act Aligned</span>
+                <span class="trust-item"><span class="trust-dot"></span>Data Never Stored Outside India</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div>
+                <span class="footer-logo">Swift<span>Sane</span></span>
+                <span class="footer-tag">Secure Every Link in the Chain.</span>
+            </div>
+            <ul class="footer-links">
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#compliance">Compliance</a></li>
+                <li><a href="#why">Why SwiftSane</a></li>
+            </ul>
+            <div class="footer-right">Made in India 🇮🇳 · DPDP Act & RBI Aligned</div>
+        </div>
+    </footer>
+
+    <script>
+        // NAV
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobile-menu');
+        hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+        document.querySelectorAll('.mob-link').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+        // PARTICLES
+        (function () {
+            const c = document.getElementById('particle-canvas');
+            const ctx = c.getContext('2d');
+            let w, h, pts = [];
+            const N = 55, D = 130;
+            function resize() {
+                const r = c.parentElement.getBoundingClientRect();
+                w = c.width = r.width; h = c.height = r.height;
+            }
+            function create() {
+                pts = [];
+                for (let i = 0; i < N; i++) {
+                    pts.push({
+                        x: Math.random() * w, y: Math.random() * h,
+                        vx: (Math.random() - 0.5) * 0.25,
+                        vy: (Math.random() - 0.5) * 0.25,
+                        r: Math.random() * 1.2 + 0.4
+                    });
+                }
+            }
+            function draw() {
+                ctx.clearRect(0, 0, w, h);
+                for (let i = 0; i < pts.length; i++) {
+                    const p = pts[i];
+                    p.x += p.vx; p.y += p.vy;
+                    if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
+                    if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(229,52,46,0.12)'; ctx.fill();
+                    for (let j = i + 1; j < pts.length; j++) {
+                        const q = pts[j];
+                        const dx = p.x - q.x, dy = p.y - q.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < D) {
+                            ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y);
+                            ctx.strokeStyle = `rgba(229,52,46,${0.06 * (1 - dist / D)})`;
+                            ctx.lineWidth = 0.5; ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(draw);
+            }
+            resize(); create(); draw();
+            window.addEventListener('resize', () => { resize(); create(); });
+        })();
+
+        // SCORE COUNTER
+        (function () {
+            const el = document.getElementById('score-counter');
+            const target = 68;
+            let started = false;
+            new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    if (e.isIntersecting && !started) {
+                        started = true;
+                        const s = performance.now();
+                        function t(n) {
+                            const p = Math.min((n - s) / 1500, 1);
+                            el.textContent = Math.round((1 - Math.pow(1 - p, 3)) * target);
+                            if (p < 1) requestAnimationFrame(t);
+                        }
+                        requestAnimationFrame(t);
+                    }
+                });
+            }, { threshold: 0.3 }).observe(el);
+        })();
+
+        // FADE-UPS
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+        document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+    </script>
+</body>
+
+</html>
