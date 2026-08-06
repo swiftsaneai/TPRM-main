@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SwiftSane — Sign In</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=JetBrains+Mono:wght@400&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Brand Tokens ─────────────────────────────────────────── */
+    :root {
+      --ink:        #16171D;
+      --ink-soft:   #2A2C36;
+      --ink-muted:  #6B6E7A;
+      --ink-line:   #E5E5EA;
+      --paper:      #FFFFFF;
+      --paper-warm: #FAFAF7;
+      --crimson:    #B01A2D;
+      --navy:       #004777;
+      --amber:      #B07A14;
+      --green:      #2E6F40;
+
+      /* Typography */
+      --font-serif: 'Fraunces', serif;
+      --font-ui:    'Poppins', sans-serif;
+      --font-mono:  'JetBrains Mono', monospace;
+    }
+
+    /* ─── Reset ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      background: var(--ink-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-ui);
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ─── Shell ─────────────────────────────────────────────────── */
+    main.login-shell {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 960px;
+      height: 680px;
+      overflow: hidden;
+    }
+
+    /* ─── LEFT: Dark Editorial Panel ───────────────────────────── */
+    section.editorial-panel {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 32px 40px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative shield — top-right, partially clipped */
+    .shield-deco {
+      position: absolute;
+      top: -40px;
+      right: -80px;
+      width: 280px;
+      height: 280px;
+      opacity: 0.04;
+      pointer-events: none;
+    }
+
+    /* Brand block */
+    header.brand-block {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-block .logo-placeholder {
+      width: 24px;
+      height: 22px;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .wordmark {
+      font-family: var(--font-serif);
+      font-size: 17px;
+      line-height: 1;
+      letter-spacing: -0.018em;
+    }
+    .wordmark .tiny-part {
+      font-style: italic;
+      color: rgba(255,255,255,0.72);
+    }
+    .wordmark .crows-part {
+      font-style: normal;
+      color: var(--crimson);
+    }
+
+    .brand-eyebrow {
+      font-family: var(--font-ui);
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.42);
+      margin-top: 5px;
+      padding-left: 33px; /* align under wordmark */
+    }
+
+    /* Hero block */
+    .hero-block {
+      margin-top: 64px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--crimson);
+      margin-bottom: 14px;
+    }
+
+    .hero-headline {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.18;
+      letter-spacing: -0.019em;
+      margin-bottom: 16px;
+    }
+    .hero-headline .dim { color: rgba(255,255,255,0.55); font-style: italic; }
+    .hero-headline .bright { color: var(--paper); font-style: normal; }
+
+    .hero-body {
+      font-family: var(--font-ui);
+      font-size: 12.5px;
+      font-weight: 400;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.62);
+      max-width: 360px;
+    }
+
+    /* News items */
+    .news-list {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    .news-item {
+      border-top: 0.5px solid rgba(255,255,255,0.12);
+      padding: 14px 0;
+    }
+
+    .news-item-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .news-category {
+      font-family: var(--font-ui);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .news-dot {
+      font-size: 9px;
+      color: rgba(255,255,255,0.25);
+    }
+
+    .news-time {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: rgba(255,255,255,0.50);
+    }
+
+    .news-headline {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--paper);
+      letter-spacing: -0.01em;
+      margin-bottom: 5px;
+    }
+
+    .news-headline .mono-num {
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+
+    .news-source {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-style: italic;
+      color: rgba(255,255,255,0.50);
+    }
+
+    /* ─── RIGHT: Form Panel ─────────────────────────────────────── */
+    section.form-panel {
+      background: var(--paper-warm);
+      padding: 48px 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .form-inner {
+      width: 340px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-eyebrow {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 14px;
+    }
+
+    .form-greeting {
+      font-family: var(--font-serif);
+      font-size: 34px;
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.019em;
+      margin-bottom: 12px;
+    }
+    .form-greeting .welcome-dim { font-style: italic; color: var(--ink-muted); }
+    .form-greeting .back-word   { font-style: normal; color: var(--ink); }
+    .form-greeting .period      { color: var(--crimson); }
+
+    .form-subhead {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--ink-muted);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    /* SSO Buttons */
+    .sso-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sso-button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 3px;
+      font-family: var(--font-ui);
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--ink);
+      background: var(--paper);
+      transition: background 120ms ease, box-shadow 120ms ease;
+      cursor: pointer;
+    }
+
+    .sso-button.sso-primary {
+      border: 0.5px solid var(--ink);
+    }
+
+    .sso-button.sso-secondary {
+      border: 0.5px solid var(--ink-line);
+    }
+
+    .sso-button:hover {
+      background: var(--paper-warm);
+      box-shadow: 0 1px 3px rgba(22,23,29,0.07);
+    }
+
+    .sso-button:active {
+      background: #F0F0EC;
+    }
+
+    .sso-button .sso-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    /* Reassurance card */
+    .reassurance-card {
+      margin-top: 28px;
+      background: var(--paper);
+      border: 0.5px solid var(--ink-line);
+      border-radius: 3px;
+      padding: 14px 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .reassurance-card .shield-icon {
+      flex-shrink: 0;
+      margin-top: 1px;
+      color: var(--navy);
+    }
+
+    .reassurance-text .reassurance-heading {
+      font-family: var(--font-ui);
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .reassurance-text .reassurance-body {
+      font-family: var(--font-ui);
+      font-size: 11.5px;
+      font-weight: 400;
+      color: var(--ink-muted);
+      line-height: 1.55;
+    }
+
+    .reassurance-text .reassurance-body a {
+      color: var(--crimson);
+      text-decoration: underline;
+      text-decoration-thickness: 0.5px;
+      text-underline-offset: 2px;
+    }
+
+    .reassurance-text .reassurance-body a:hover {
+      opacity: 0.8;
+    }
+
+    /* Footer links */
+    .form-footer {
+      margin-top: 36px;
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+    }
+
+    .form-footer a {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--ink-muted);
+      transition: color 100ms ease;
+    }
+
+    .form-footer a:hover {
+      color: var(--ink);
+    }
+  </style>
+</head>
+<body>
+
+  <main class="login-shell">
+
+    <!-- ═══ LEFT: Dark Editorial Panel ═══ -->
+    <section class="editorial-panel">
+
+      <!-- Decorative shield silhouette -->
+      <svg class="shield-deco" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M140 14 L252 56 L252 140 C252 196 204 238 140 266 C76 238 28 196 28 140 L28 56 Z" fill="white"/>
+      </svg>
+
+      <!-- Brand -->
+      <header class="brand-block">
+        <img src="logo.svg" alt="SwiftSane" width="24" height="22" class="logo-placeholder" style="display:block;" />
+        <span class="wordmark">
+          <span class="tiny-part">tiny</span><span class="crows-part">crows</span>
+        </span>
+      </header>
+      <p class="brand-eyebrow">Risk Intelligence</p>
+
+      <!-- Hero -->
+      <article class="hero-block" style="margin: 2px 0px 0px">
+        <p class="hero-eyebrow"></p>
+        <h1 class="hero-headline">
+          <span class="dim">The </span><span class="bright">quiet vendor</span><br>
+          <span class="bright">is the loudest risk.</span>
+        </h1>
+        <p class="hero-body">
+          A weekly read from the SwiftSane desk — what the analyst community
+          is watching, what regulators are signalling, what the wires picked
+          up overnight.
+        </p>
+      </article>
+
+      <!-- News items — injected by JS below -->
+      <div class="news-list" id="news-list"></div>
+
+    </section>
+
+    <!-- ═══ RIGHT: Form Panel ═══ -->
+    <section class="form-panel">
+      <div class="form-inner">
+
+        <p class="form-eyebrow">Sign in</p>
+
+        <h2 class="form-greeting">
+          <span class="welcome-dim">Welcome </span><span class="back-word">back</span><span class="period">.</span>
+        </h2>
+
+        <p class="form-subhead">
+          Continue with your work account. We don't keep passwords — your
+          identity provider handles that.
+        </p>
+
+        <div class="sso-buttons">
+          <!-- Google -->
+          <a href="#" class="sso-button sso-primary" aria-label="Continue with Google">
+            <svg class="sso-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M17.64 9.205c0-.639-.057-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.614Z" fill="#4285F4"/>
+              <path d="M9 18c2.43 0 4.467-.806 5.956-2.181l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z" fill="#34A853"/>
+              <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z" fill="#FBBC05"/>
+              <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58Z" fill="#EA4335"/>
+            </svg>
+            Continue with Google
+          </a>
+
+          <!-- Microsoft -->
+          <a href="#" class="sso-button sso-secondary" aria-label="Continue with Microsoft">
+            <svg class="sso-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="1" y="1" width="7.5" height="7.5" fill="#F25022"/>
+              <rect x="9.5" y="1" width="7.5" height="7.5" fill="#7FBA00"/>
+              <rect x="1" y="9.5" width="7.5" height="7.5" fill="#00A4EF"/>
+              <rect x="9.5" y="9.5" width="7.5" height="7.5" fill="#FFB900"/>
+            </svg>
+            Continue with Microsoft
+          </a>
+        </div>
+
+        <!-- Reassurance card -->
+        <aside class="reassurance-card">
+          <svg class="shield-icon" width="16" height="18" viewBox="0 0 16 18" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 1 L15 4 L15 9 C15 13 11.5 16.2 8 17.5 C4.5 16.2 1 13 1 9 L1 4 Z"/>
+          </svg>
+          <div class="reassurance-text">
+            <p class="reassurance-heading">SSO-only by design</p>
+            <p class="reassurance-body">
+              Access is provisioned by your administrator. New to SwiftSane?
+              Ask them to add you, or <a href="#">contact our team</a>.
+            </p>
+          </div>
+        </aside>
+
+        <!-- Footer -->
+        <nav class="form-footer" aria-label="Legal">
+          <a href="#">Privacy policy</a>
+          <a href="#">Terms of usage</a>
+        </nav>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // ─── News items — edit this array weekly ───────────────────────
+    const newsItems = [
+      {
+        category: "BREACH",
+        categoryColor: "var(--crimson)",
+        timeAgo: "2 days ago",
+        headline: "SEC's amended cyber-disclosure rule sees first wave of 8-K filings citing third-party origin.",
+        headlineHtml: null,
+        source: "Wall Street Journal"
+      },
+      {
+        category: "REGULATION",
+        categoryColor: "#EF9F27",
+        timeAgo: "5 days ago",
+        headline: "EU DORA enforcement begins — financial entities now liable for ICT third-party concentration risk.",
+        headlineHtml: null,
+        source: "Financial Times"
+      },
+      {
+        category: "FIELD DATA",
+        categoryColor: "#5DCAA5",
+        timeAgo: "This week",
+        headline: null,
+        headlineHtml: `<span class="mono-num">61%</span> of breaches in 2025 traced to a fourth-party vendor — up from 44% in 2023.`,
+        source: "Gartner Peer Community Pulse, Q1 2026"
+      }
+    ];
+
+    // ─── Render template ──────────────────────────────────────────
+    const container = document.getElementById('news-list');
+    container.innerHTML = newsItems.map(item => `
+      <article class="news-item">
+        <div class="news-item-meta">
+          <span class="news-category" style="color: ${item.categoryColor};">${item.category}</span>
+          <span class="news-dot">·</span>
+          <time class="news-time">${item.timeAgo}</time>
+        </div>
+        <p class="news-headline">${item.headlineHtml ?? item.headline}</p>
+        <p class="news-source">${item.source}</p>
+      </article>
+    `).join('');
+  </script>
+
+</body>
+</html>
